@@ -73,3 +73,34 @@ textarea {
 .row {
   height: auto
 }
+
+@media screen and (max-width: 992px) {
+  .jumbotron {
+    padding: 10px;
+}
+  .display-3 {
+    font-size: 60px;
+}
+}
+
+@media screen and (max-width: 750px) {
+  .jumbotron {
+    padding: 10px;
+    margin-bottom: 0px;
+}
+  .display-3 {
+    font-size: 40px;
+}
+  .lead{
+    font-size: 14px;
+  }
+  .custom-input{
+    height: 35px;
+  }
+  /* .custom-time{
+    padding: 2px;
+  } */
+  .custom-save{
+    padding: 2px;   
+  }  
+}
