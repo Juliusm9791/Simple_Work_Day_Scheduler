@@ -7,7 +7,7 @@ setInterval(function(){
 },1000);
 
 let startHour = 9;
-let businesHours = 20;
+let businessHours = 16;
 let timeFormElements = $("#timeFormEl");
 let dayHours = $('<form class="dayHours d-flex row">');
 let listHour = $('<div class="col-md-1 text-center p-3"></div>');
@@ -15,7 +15,7 @@ let inputText = $('<input type="text" class="col-md-10 form-input w-100 custom-i
 let saveButton = $('<button class="col-md-1 btn btn-info custom-save">Save</button>');
 
 function createTimeFormEl(){
-    for (i = startHour; i < startHour + businesHours ; i++) {
+    for (i = startHour; i < startHour + businessHours ; i++) {
         listHour.text(moment(i, 'hh').format("hh A"))
         dayHours.append(listHour);
         dayHours.append(inputText);
@@ -28,6 +28,14 @@ createTimeFormEl();
 let taskArray = JSON.parse(localStorage.getItem("taskArray"));
 if (taskArray === null) {
     taskArray = [];
+}
+
+for (i = 0; i < timeFormElements.children().length; i++) {
+    for (j = 0; j < taskArray.length; j++){
+        if (taskArray[j].taskHour === timeFormElements.children().eq(i).children().eq(0).text()){
+            timeFormElements.children().eq(i).children().eq(1).val(taskArray[j].taskText);
+        }
+    }
 }
 
 let customInput =$(".custom-input");
@@ -43,10 +51,14 @@ function colectInput(event) {
     task.taskText = btnClicked.prev().val();
     task.taskHour = btnClicked.siblings(0).text();
     saveInAndCheckArray(task)
-
 }
 
 saveButtonPress.on("click", colectInput)
+
+
+
+
+
 
 function saveInAndCheckArray(task){
     let foundTime = false;
@@ -61,6 +73,7 @@ function saveInAndCheckArray(task){
     if (!foundTime){
     taskArray.push(task);
 }
+localStorage.setItem("taskArray", JSON.stringify(taskArray));
     console.log(taskArray);
 }
 
