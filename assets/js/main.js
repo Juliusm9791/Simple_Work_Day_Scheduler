@@ -25,23 +25,45 @@ function createTimeFormEl(){
 }
 createTimeFormEl();
 
-// let task = {
-    //     taskHour: 0,
-    //     taskText: "",
-    // }
-    let customInput =$(".custom-input");
-    let saveButtonPress = $(".custom-save");
-    
-    function colectInput(event) {
-        event.preventDefault();
-        let btnClicked = $(event.target);
-        let taskText = btnClicked.prev().val();
-        let arr = saveData();
-        console.log(arr + " LLL " + taskText);
+let taskArray = JSON.parse(localStorage.getItem("taskArray"));
+if (taskArray === null) {
+    taskArray = [];
+}
+
+let customInput =$(".custom-input");
+let saveButtonPress = $(".custom-save");
+
+function colectInput(event) {
+    let task = {
+        taskHour: "",
+        taskText: "",
     }
-    saveButtonPress.on("click", colectInput)
-    
-    
+    event.preventDefault();
+    let btnClicked = $(event.target);
+    task.taskText = btnClicked.prev().val();
+    task.taskHour = btnClicked.siblings(0).text();
+    saveInAndCheckArray(task)
+
+}
+
+saveButtonPress.on("click", colectInput)
+
+function saveInAndCheckArray(task){
+    let foundTime = false;
+        for (i = 0; i < taskArray.length; i++){
+            console.log(taskArray[i].taskHour === task.taskHour)
+            if (taskArray[i].taskHour === task.taskHour){
+                taskArray.splice(i, 1, task);
+                foundTime = true;
+            } 
+        }
+      
+    if (!foundTime){
+    taskArray.push(task);
+}
+    console.log(taskArray);
+}
+
     for (i = 0; i < timeFormElements.children().length; i++){
         let timeLineEl  = document.getElementById("timeFormEl").children[i];
         let timeAtLine = timeLineEl.children[0].textContent;
@@ -54,15 +76,3 @@ createTimeFormEl();
             timeLineEl.children[1].setAttribute("style", "background-color: green");
         }
     }
-// console.log(timeFormElements.children().children().siblings().eq(0).text())
-// console.log(timeFormElements.children().length)
-function saveData(){
-    let taskArray =[];
-    for (i = 0; i < timeFormElements.children().length; i++){
-      let timeLineEl  = document.getElementById("timeFormEl").children[i];
-      let textAtLine = timeLineEl.children[1].value;
-      taskArray.push(textAtLine);
-    }
-    console.log(textAtLine + "hi");
-    return taskArray;
-}
