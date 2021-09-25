@@ -74,6 +74,10 @@ textarea {
   height: auto
 }
 
+#timeFormEl div:hover{
+  cursor: grabbing;
+}
+
 @media screen and (max-width: 992px) {
   .jumbotron {
     padding: 10px;
@@ -97,9 +101,9 @@ textarea {
   .custom-input{
     height: 35px;
   }
-  /* .custom-time{
+   .custom-time{
     padding: 2px;
-  } */
+  } 
   .custom-save{
     padding: 2px;   
   }  

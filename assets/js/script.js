@@ -6,8 +6,8 @@ setInterval(function(){
     $("#hourNow").text(moment().format('LTS'));
 },1000);
 
-let startHour = 9;
-let businessHours = 10;
+let startHour = 15;
+let businessHours = 9;
 let timeFormElements = $("#timeFormEl");
 let dayHours = $('<form class="dayHours d-flex row">');
 let listHour = $('<div class="col-md-1 text-center p-3 custom-time"></div>');
@@ -25,38 +25,9 @@ function createTimeFormEl(){
 }
 createTimeFormEl();
 
-$("#timeFormEl").sortable({
-    update: function() {
-        updatesAfterSortable();
-        checkTimeColors();
-        localStorage.removeItem("taskArray");
-        updateLocalStoreage();
-}});
-
-function updatesAfterSortable(){
-    for (i = 0; i < businessHours; i++){
-        timeFormElements.children().eq(i).children().eq(0).text(moment(startHour + i, 'hh').format("hh A"));
-    }
-}
-
-function updateLocalStoreage(){
-    let task = {
-        taskHour: "",
-        taskText: "",
-    }
-    console.log(timeFormElements.length)
-    for (i = 0; i < timeFormElements.children().length; i++){
-        if (timeFormElements.children().eq(i).children().eq(1).val() !== ""){
-            task.taskText = timeFormElements.children().eq(i).children().eq(1).val();
-            task.taskHour = timeFormElements.children().eq(i).children().eq(0).text()
-            taskArray = [];
-            taskArray.push(task);
-        }
-    }
-    localStorage.setItem("taskArray", JSON.stringify(taskArray));
-}
-
-let taskArray = JSON.parse(localStorage.getItem("taskArray"));
+let taskArray = [];
+$(document).ready(function() {
+taskArray = JSON.parse(localStorage.getItem("taskArray"));
 if (taskArray === null) {
     taskArray = [];
 }
@@ -68,9 +39,33 @@ for (i = 0; i < timeFormElements.children().length; i++) {
         }
     }
 }
+});
 
-let customInput =$(".custom-input");
-let saveButtonPress = $(".custom-save");
+$("#timeFormEl").sortable({
+    update: function() {
+        updateTimeAfterSortable();
+        checkTimeColors();
+        updateLocalStoreage();
+}});
+
+function updateTimeAfterSortable(){
+    for (i = 0; i < businessHours; i++){
+        timeFormElements.children().eq(i).children().eq(0).text(moment(startHour + i, 'hh').format("hh A"));
+    }
+}
+
+function updateLocalStoreage(){
+    for (i = 0; i < taskArray.length; i++){
+        for (j = 0; j < timeFormElements.children().length; j++){
+            if (taskArray[i].taskText === timeFormElements.children().eq(j).children().eq(1).val()){
+                taskArray[i].taskHour = timeFormElements.children().eq(j).children().eq(0).text();
+            }
+        }
+    }
+    localStorage.setItem("taskArray", JSON.stringify(taskArray));
+}
+
+$(".custom-save").on("click", colectInput)
 
 function colectInput(event) {
     let task = {
@@ -81,28 +76,16 @@ function colectInput(event) {
     let btnClicked = $(event.target);
     task.taskText = btnClicked.prev().val();
     task.taskHour = btnClicked.siblings(0).text();
+    console.log(taskArray)
     saveInAndCheckArray(task)
     applyTimeColors(btnClicked.parent(), task.taskHour)
 }
-saveButtonPress.on("click", colectInput)
 
+$(".custom-input").on("keydown", valueEnter)
 
 function valueEnter(event){
-    event.preventDefault();
-    console.log($(event.target).val())
-    // if ($(event.target).val() ==="") {
-    //     $(event.target).css({backgroundColor: "lightgray"});
-    // } 
-    $(event.target).keydown(function() {
-        if ($(event.target).val() ==="") {
-            $(event.target).css({backgroundColor: "orange"});
-        } 
-        // if ($(event.target).val() ==="") {
-        //     $(event.target).css({backgroundColor: "lightgray"});
-        // }
-    });
+    $(event.target).css({backgroundColor: "orange"});
 }
-customInput.on("click", valueEnter)
 
 function saveInAndCheckArray(task){
     let foundTime = false;
@@ -113,10 +96,11 @@ function saveInAndCheckArray(task){
             } 
         }
     if (!foundTime){
-    taskArray.push(task);
+    taskArray.push(task);   
+    }
+    localStorage.setItem("taskArray", JSON.stringify(taskArray));
 }
-localStorage.setItem("taskArray", JSON.stringify(taskArray));
-}
+
 checkTimeColors()
 
 function checkTimeColors(){
