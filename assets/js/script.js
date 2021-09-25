@@ -14,6 +14,7 @@ let listHour = $('<div class="col-md-1 text-center p-3 custom-time"></div>');
 let inputText = $('<input autocomplete="off" type="text" class="col-md-10 form-input w-100 custom-input" name="shopping-input" placeholder="Add a reminder"/>');
 let saveButton = $('<button class="col-md-1 btn btn-info custom-save">Save</button>');
 
+// Cerate time notes in html
 function createTimeFormEl(){
     for (i = startHour; i < startHour + businessHours; i++) {
         listHour.text(moment(i, 'hh').format("hh A"))
@@ -25,13 +26,14 @@ function createTimeFormEl(){
 }
 createTimeFormEl();
 
+// Read data from local storage
 let taskArray = [];
 $(document).ready(function() {
 taskArray = JSON.parse(localStorage.getItem("taskArray"));
 if (taskArray === null) {
     taskArray = [];
 }
-
+// show data in html
 for (i = 0; i < timeFormElements.children().length; i++) {
     for (j = 0; j < taskArray.length; j++){
         if (taskArray[j].taskHour === timeFormElements.children().eq(i).children().eq(0).text()){
@@ -41,6 +43,7 @@ for (i = 0; i < timeFormElements.children().length; i++) {
 }
 });
 
+// Sorting time notes, updating color and time in local storage
 $("#timeFormEl").sortable({
     update: function() {
         updateTimeAfterSortable();
@@ -65,6 +68,7 @@ function updateLocalStoreage(){
     localStorage.setItem("taskArray", JSON.stringify(taskArray));
 }
 
+// Saving data to local storage
 $(".custom-save").on("click", colectInput)
 
 function colectInput(event) {
@@ -76,17 +80,18 @@ function colectInput(event) {
     let btnClicked = $(event.target);
     task.taskText = btnClicked.prev().val();
     task.taskHour = btnClicked.siblings(0).text();
-    console.log(taskArray)
     saveInAndCheckArray(task)
     applyTimeColors(btnClicked.parent(), task.taskHour)
 }
 
+// When start typing changes field color
 $(".custom-input").on("keydown", valueEnter)
 
 function valueEnter(event){
     $(event.target).css({backgroundColor: "orange"});
 }
 
+// Save and update data to local storage 
 function saveInAndCheckArray(task){
     let foundTime = false;
         for (i = 0; i < taskArray.length; i++){
@@ -101,8 +106,8 @@ function saveInAndCheckArray(task){
     localStorage.setItem("taskArray", JSON.stringify(taskArray));
 }
 
+// Sets colors according the time now.
 checkTimeColors()
-
 function checkTimeColors(){
     for (i = 0; i < timeFormElements.children().length; i++){
         let timeLineEl = timeFormElements.children().eq(i);
@@ -112,7 +117,7 @@ function checkTimeColors(){
 }
 
 function applyTimeColors(timeLineEl, timeAtLine){
-    let checkTime = moment(timeAtLine, 'hh A').isBefore(moment()); //true or false
+    let checkTime = moment(timeAtLine, 'hh A').isBefore(moment()); //true or false time now
     if (timeAtLine === moment().format('hh A')){
         timeLineEl.children().eq(1).css({backgroundColor: "red", color: "white"});
     }else if (checkTime){
