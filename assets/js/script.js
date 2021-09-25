@@ -78,10 +78,12 @@ function colectInput(event) {
     }
     event.preventDefault();
     let btnClicked = $(event.target);
-    task.taskText = btnClicked.prev().val();
-    task.taskHour = btnClicked.siblings(0).text();
-    saveInAndCheckArray(task)
-    applyTimeColors(btnClicked.parent(), task.taskHour)
+    if (btnClicked.prev().val() !== ""){
+        task.taskText = btnClicked.prev().val();
+        task.taskHour = btnClicked.siblings(0).text();
+        saveInAndCheckArray(task)
+        applyTimeColors(btnClicked.parent(), task.taskHour)
+    }
 }
 
 // When start typing changes field color
