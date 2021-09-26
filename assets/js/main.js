@@ -6,16 +6,15 @@ setInterval(function(){
     $("#hourNow").text(moment().format('LTS'));
 },1000);
 
-let startHour = 8;
-let businessHours = 9;
-let timeFormElements = $("#timeFormEl");
-let dayHours = $('<form class="dayHours d-flex row">');
-let listHour = $('<div class="col-md-1 text-center p-3 custom-time"></div>');
-let inputText = $('<input autocomplete="off" type="text" class="col-md-10 form-input w-100 custom-input" name="shopping-input" placeholder="Add a reminder"/>');
-let saveButton = $('<button class="col-md-1 btn btn-info custom-save">Save</button>');
 
-// Clear data from memory and HTML
-$("#clearAll").on("click", clearAll);
+
+
+let hoursRangeFrom = document.getElementById("hoursRangeFrom");
+let hoursRangeFromOut = document.getElementById("hoursRangeFromOut");
+let hoursRangeTotal = document.getElementById("hoursRangeTotal");
+let hoursRangeTotalOut = document.getElementById("hoursRangeTotalOut");
+
+ $("#clearAll").on("click", clearAll);
 
 function clearAll(){
     let wantClear = false;
@@ -30,6 +29,61 @@ function clearAll(){
        
     }
 }
+
+$("#confitmUpdate").on("click", confitmUpdate);
+
+function confitmUpdate(){
+    // // event.preventDefault();
+    // startHour = parseInt(localStorage.getItem("hoursFrom"))
+    // businessHours = parseInt(localStorage.getItem("hoursTotal"))
+    // while (document.getElementById("timeFormEl").firstChild) {
+    //     document.getElementById("timeFormEl").removeChild(document.getElementById("timeFormEl").firstChild);
+    // }
+    // createTimeFormEl();
+    // getDataFromMemory();
+    // checkTimeColors();
+  
+    
+}
+
+
+
+
+
+
+hoursRangeFromOut.textContent = hoursRangeFrom.value;
+hoursRangeTotalOut.textContent = hoursRangeTotal.value;
+
+hoursRangeFrom.oninput = function() {
+    hoursRangeFromOut.textContent = this.value;
+    localStorage.setItem("hoursFrom", this.value)
+}
+hoursRangeTotal.oninput = function() {
+    hoursRangeTotalOut.textContent = this.value;
+    localStorage.setItem("hoursTotal", this.value)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let startHour = 15;
+let businessHours = 9;
+let timeFormElements = $("#timeFormEl");
+let dayHours = $('<form class="dayHours d-flex row">');
+let listHour = $('<div class="col-md-1 text-center p-3 custom-time"></div>');
+let inputText = $('<input autocomplete="off" type="text" class="col-md-10 form-input w-100 custom-input" name="shopping-input" placeholder="Add a reminder"/>');
+let saveButton = $('<button class="col-md-1 btn btn-info custom-save">Save</button>');
 
 // Cerate time notes in html
 function createTimeFormEl(){
@@ -48,18 +102,18 @@ let taskArray = [];
 $(document).ready(getDataFromMemory);
     
 function getDataFromMemory() {
-    taskArray = JSON.parse(localStorage.getItem("taskArray"));
-    if (taskArray === null) {
-        taskArray = [];
-    }
+taskArray = JSON.parse(localStorage.getItem("taskArray"));
+if (taskArray === null) {
+    taskArray = [];
+}
 // show data in html
-    for (i = 0; i < timeFormElements.children().length; i++) {
-        for (j = 0; j < taskArray.length; j++){
-            if (taskArray[j].taskHour === timeFormElements.children().eq(i).children().eq(0).text()){
-                timeFormElements.children().eq(i).children().eq(1).val(taskArray[j].taskText);
-            }
+for (i = 0; i < timeFormElements.children().length; i++) {
+    for (j = 0; j < taskArray.length; j++){
+        if (taskArray[j].taskHour === timeFormElements.children().eq(i).children().eq(0).text()){
+            timeFormElements.children().eq(i).children().eq(1).val(taskArray[j].taskText);
         }
     }
+}
 }
 
 // Sorting time notes, updating color and time in local storage
@@ -95,7 +149,7 @@ function colectInput(event) {
         taskHour: "",
         taskText: "",
     }
-    event.preventDefault();
+    // event.preventDefault();
     let btnClicked = $(event.target);
     if (btnClicked.prev().val() !== ""){
         task.taskText = btnClicked.prev().val();
