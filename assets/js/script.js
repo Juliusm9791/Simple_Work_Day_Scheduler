@@ -11,7 +11,7 @@ let businessHours = 9;
 let timeFormElements = $("#timeFormEl");
 let dayHours = $('<form class="dayHours d-flex row">');
 let listHour = $('<div class="col-md-1 text-center p-3 custom-time"></div>');
-let inputText = $('<input autocomplete="off" type="text" class="col-md-10 form-input w-100 custom-input" name="shopping-input" placeholder="Add a reminder"/>');
+let inputText = $('<input autocomplete="off" type="text" class="col-md-10 form-input w-100 custom-input" name="shopping-input"/>');
 let saveButton = $('<button class="col-md-1 btn btn-info custom-save">Save</button>');
 
 // Clear data from memory and HTML
