@@ -19,7 +19,7 @@ You can grab on event time and drag it to a different time place to rearrange ev
 If you want to delete all events just press “Clear All” button.
 
 ## Link to website
-https://juliusm9791.github.io/Simple-Work-Day-Scheduler/
+https://juliusm9791.github.io/Simple_Work_Day_Scheduler/
 
 
 ## Mock-Up
